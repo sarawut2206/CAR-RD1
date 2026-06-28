@@ -330,7 +330,7 @@ footer{text-align:center;padding:20px;font-size:12.5px;color:var(--slate-muted);
 
 <script>
 // ===== CONFIG =====
-const SCRIPT_URL = ''; // ← วาง URL Apps Script ที่นี่
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQMm0L58t_LpQk-TjlugmAenHM-SKCHV7TCw7kLXsZm6beIsYr_YczKdgKoK62lfJemA/exec';
 const MAX_PER_BUS = 23;
 const TOTAL_BUSES = 8;
 const ADMIN_PASSWORD = 'SAM2206';
@@ -656,9 +656,16 @@ function selectBus(n) {
 // ===== DROPDOWN =====
 function populateDropdown() {
   const sel = document.getElementById('nameSelect');
-  const sorted = [...STUDENT_DB].sort((a,b) => a.name.localeCompare(b.name,'th'));
-  sel.innerHTML = '<option value="">-- กดเลือกชื่อ นศท. --</option>' +
-    sorted.map(s=>`<option value="${s.id}">${s.name} (${s.gender})</option>`).join('');
+  const males   = STUDENT_DB.filter(s=>s.gender==='ชาย').sort((a,b)=>a.name.localeCompare(b.name,'th'));
+  const females = STUDENT_DB.filter(s=>s.gender==='หญิง').sort((a,b)=>a.name.localeCompare(b.name,'th'));
+  let html = '<option value="">-- กดเลือกชื่อ นศท. --</option>';
+  html += `<optgroup label="👨 นศท.ชาย (${males.length} คน)">`;
+  html += males.map((s,i)=>`<option value="${s.id}">${i+1}. ${s.name}</option>`).join('');
+  html += '</optgroup>';
+  html += `<optgroup label="👩 นศท.หญิง (${females.length} คน)">`;
+  html += females.map((s,i)=>`<option value="${s.id}">${i+1}. ${s.name}</option>`).join('');
+  html += '</optgroup>';
+  sel.innerHTML = html;
 }
 
 function onNameSelect(id) {
