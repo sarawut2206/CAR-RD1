@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบจองรถ นศท. ชั้นปีที่ 1 - โรงเรียนมัธยมวัดหนองแขม</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700;800&family=Kanit:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --olive:#4a7c59;--olive-dark:#355c42;--olive-light:#e8f2ec;
+  --sand:#c8a96e;--sand-light:#fdf6ea;
+  --camo1:#6b7c5c;--camo2:#8b9e7a;
+  --navy:#1a2744;--navy-mid:#2d4270;
+  --red:#e05252;--red-bg:#fdeaea;
+  --amber:#d97706;--amber-bg:#fef3c7;
+  --emerald:#059669;--emerald-bg:#d1fae5;
+  --sky:#0284c7;--sky-bg:#e0f2fe;
+  --rose:#db2777;--rose-bg:#fce7f3;
+  --slate:#1e293b;--slate-muted:#64748b;--line:#e2e8f0;
+  --card:#fff;--bg:#f0f4f0;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 8px 24px rgba(74,124,89,.15);
+  --shadow-lg:0 16px 40px rgba(26,39,68,.18);
+  --bus1:#e05252;--bus2:#4a7c59;--bus3:#2563eb;
+  --bus4:#d97706;--bus5:#7c3aed;--bus6:#0891b2;
+  --bus7:#db2777;--bus8:#b45309;
+}
+body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--slate);min-height:100vh;font-size:15px;line-height:1.6;
+  background-image:radial-gradient(circle at 5% 10%,rgba(74,124,89,.07) 0,transparent 40%),radial-gradient(circle at 95% 5%,rgba(200,169,110,.08) 0,transparent 40%)}
+
+/* HEADER */
+header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 50%,var(--olive-dark) 100%);color:#fff;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hdr-wrap{max-width:1000px;margin:0 auto;padding:28px 20px 20px;display:flex;align-items:center;gap:16px;position:relative;z-index:1}
+.hdr-emblem{width:58px;height:58px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;backdrop-filter:blur(4px)}
+.hdr-text h1{font-family:'Kanit',sans-serif;font-size:20px;font-weight:700;letter-spacing:.01em}
+.hdr-text p{font-size:13px;opacity:.8;margin-top:3px}
+.hdr-banner{max-width:1000px;margin:0 auto;padding:10px 20px;font-size:13.5px;font-weight:600;background:rgba(200,169,110,.2);border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:8px;position:relative;z-index:1}
+
+/* LAYOUT */
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 40px}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:#fff;padding:5px;border-radius:16px;box-shadow:var(--shadow-sm);margin-bottom:24px}
+.tab{flex:1;padding:10px 6px;text-align:center;font-size:13.5px;font-weight:700;border-radius:12px;cursor:pointer;color:var(--slate-muted);border:none;background:transparent;font-family:inherit;transition:all .2s}
+.tab.active{background:linear-gradient(120deg,var(--navy),var(--olive));color:#fff;box-shadow:0 4px 12px rgba(26,39,68,.3)}
+
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ALERT */
+.alert{padding:12px 16px;border-radius:14px;font-size:14px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;box-shadow:var(--shadow-sm)}
+.alert-icon{font-size:17px;flex-shrink:0;margin-top:1px}
+.alert-warning{background:var(--amber-bg);color:#92400e}
+.alert-danger{background:var(--red-bg);color:#b91c1c}
+.alert-success{background:var(--emerald-bg);color:#047857}
+.alert-info{background:var(--sky-bg);color:#0369a1}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.stat-item{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:14px 12px;text-align:center;box-shadow:var(--shadow-sm)}
+.stat-num{font-family:'Kanit',sans-serif;font-size:26px;font-weight:700;color:var(--olive)}
+.stat-label{font-size:12px;color:var(--slate-muted);margin-top:2px;font-weight:600}
+
+/* BUS GRID */
+.bus-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:28px}
+.bus-card{background:#fff;border:1.5px solid var(--line);border-radius:20px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow-sm);transition:box-shadow .2s,transform .15s,border-color .2s}
+.bus-card:hover:not(.full){box-shadow:var(--shadow-md);transform:translateY(-3px)}
+.bus-card.full{opacity:.55;cursor:not-allowed}
+.bus-card.selected{box-shadow:0 0 0 3px rgba(74,124,89,.4),var(--shadow-md)!important;transform:translateY(-2px)}
+.bus-hdr{padding:13px 15px;color:#fff;display:flex;align-items:center;gap:10px}
+.bus-icon{font-size:22px}
+.bus-label h3{font-family:'Kanit',sans-serif;font-size:15px;font-weight:700}
+.bus-label p{font-size:11.5px;opacity:.9;margin-top:1px}
+.bus-body{padding:13px 15px}
+.cap-bar-wrap{background:#f1f5f9;border-radius:20px;height:8px;overflow:hidden;margin-bottom:8px}
+.cap-bar{height:100%;border-radius:20px;transition:width .4s}
+.cap-text{display:flex;justify-content:space-between;font-size:12.5px;color:var(--slate-muted)}
+.cap-count{font-weight:800;font-size:13px}
+.c-green{color:var(--emerald)}.c-amber{color:var(--amber)}.c-red{color:var(--red)}
+.badge-full{display:inline-flex;align-items:center;gap:4px;background:var(--red-bg);color:#b91c1c;border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700;margin-top:8px}
+.badge-open{display:inline-flex;align-items:center;gap:4px;background:var(--emerald-bg);color:#047857;border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700;margin-top:8px}
+.seat-map{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-top:10px}
+.seat-dot{width:100%;aspect-ratio:1;border-radius:3px}
+
+/* SECTION TITLE */
+.sec-title{font-family:'Kanit',sans-serif;font-size:17px;font-weight:700;color:var(--slate);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+/* FORM CARD */
+.form-card{background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:22px;margin-bottom:24px;box-shadow:var(--shadow-sm)}
+.form-row{margin-bottom:14px}
+.form-row label{display:block;font-size:13.5px;font-weight:700;margin-bottom:5px}
+.form-row input,.form-row select{width:100%;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:14px;font-family:'Sarabun',sans-serif;color:var(--slate);background:#fbfcff;transition:border-color .15s,box-shadow .15s}
+.form-row input:focus,.form-row select:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px var(--olive-light)}
+.form-hint{font-size:12px;color:var(--slate-muted);margin-top:4px}
+
+.btn-primary{width:100%;padding:13px;background:linear-gradient(120deg,var(--navy),var(--olive));color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:700;font-family:'Sarabun',sans-serif;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 16px rgba(26,39,68,.3)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(26,39,68,.4)}
+.btn-primary:disabled{background:#c7c5d6;cursor:not-allowed;box-shadow:none}
+.btn-secondary{padding:10px 16px;background:var(--olive-light);color:var(--olive-dark);border:none;border-radius:12px;font-size:13.5px;font-weight:700;font-family:'Sarabun',sans-serif;cursor:pointer;transition:background .15s;white-space:nowrap}
+.btn-secondary:hover{background:#d4e8da}
+.btn-danger{background:linear-gradient(120deg,#b91c1c,#e05252)}
+
+/* RESULT */
+.result-card{background:linear-gradient(135deg,var(--emerald-bg),#ecfdf5);border:1.5px solid #a7f3d0;border-radius:20px;padding:22px;text-align:center;margin-bottom:24px;display:none;box-shadow:var(--shadow-sm)}
+.result-icon{font-size:42px;margin-bottom:8px}
+.result-title{font-family:'Kanit',sans-serif;font-size:18px;font-weight:700;color:#047857;margin-bottom:6px}
+.result-detail{font-size:14px;color:#065f46;line-height:1.9}
+.pending-badge{display:inline-flex;align-items:center;gap:5px;background:var(--amber-bg);color:#92400e;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700;margin-top:12px}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,39,68,.55);z-index:1000;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:24px;width:100%;max-width:460px;overflow:hidden;animation:slideUp .25s ease;box-shadow:var(--shadow-lg)}
+@keyframes slideUp{from{transform:translateY(20px) scale(.97);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+.modal-hdr{padding:18px 22px;display:flex;align-items:center;gap:12px;background:linear-gradient(120deg,var(--navy),var(--olive-dark));color:#fff}
+.modal-hdr h2{font-family:'Kanit',sans-serif;font-size:17px;font-weight:700}
+.modal-body{padding:18px 22px}
+.modal-footer{padding:0 22px 22px;display:flex;gap:10px}
+.btn-cancel{flex:1;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:14px;font-weight:600;font-family:'Sarabun',sans-serif;cursor:pointer;color:var(--slate)}
+.btn-confirm{flex:2;padding:12px;background:linear-gradient(120deg,var(--navy),var(--olive));color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:'Sarabun',sans-serif;cursor:pointer}
+
+/* ADMIN PASSENGER LIST */
+.pass-list{max-height:260px;overflow-y:auto;border:1.5px solid var(--line);border-radius:14px;font-size:13px}
+.pass-item{padding:9px 13px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.pass-item:last-child{border-bottom:none}
+.pass-num{width:24px;height:24px;background:var(--olive);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.seal-approved{display:inline-flex;align-items:center;gap:4px;background:var(--emerald-bg);color:#047857;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700}
+.seal-pending{display:inline-flex;align-items:center;gap:4px;background:var(--amber-bg);color:#92400e;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700}
+
+/* CHECKBOX BATCH */
+.batch-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--olive-light);border-radius:10px;margin-bottom:8px;font-size:13px}
+.batch-bar label{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:var(--olive-dark)}
+.batch-bar input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--olive)}
+
+/* SPINNER */
+.spinner{display:inline-block;width:15px;height:15px;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:5px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* STATUS PANEL */
+.status-bus-card{background:#fff;border:1.5px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow-sm)}
+
+footer{text-align:center;padding:20px;font-size:12.5px;color:var(--slate-muted);border-top:1px solid var(--line);margin-top:12px}
+
+@media(max-width:500px){
+  .bus-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .hdr-text h1{font-size:16px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-wrap">
+    <div class="hdr-emblem">🚍</div>
+    <div class="hdr-text">
+      <h1>ระบบจองรถโดยสาร นศท. ชั้นปีที่ 1</h1>
+      <p>โรงเรียนมัธยมวัดหนองแขม · ปีการศึกษา 2569</p>
+    </div>
+  </div>
+  <div class="hdr-banner">
+    🎖️ รถ 8 คัน · ชาย คันที่ 1–6 · หญิง คันที่ 7–8 · ค่ารถ 945 บาท/ปี · คันละไม่เกิน 23 คน
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="sysAlert" style="display:none"></div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('book')">🚌 จองรถ</button>
+    <button class="tab" onclick="switchTab('status')">📊 สถานะ</button>
+    <button class="tab" onclick="switchTab('admin')">🔐 ผู้ดูแล</button>
+  </div>
+
+  <!-- TAB BOOK -->
+  <div id="tab-book" class="tab-content active">
+    <div class="stats-grid">
+      <div class="stat-item"><div class="stat-num">8</div><div class="stat-label">รถทั้งหมด</div></div>
+      <div class="stat-item"><div class="stat-num" id="statBooked">-</div><div class="stat-label">จองแล้ว</div></div>
+      <div class="stat-item"><div class="stat-num" id="statRemain">-</div><div class="stat-label">ที่นั่งว่าง</div></div>
+      <div class="stat-item"><div class="stat-num" id="statFull">-</div><div class="stat-label">รถเต็มแล้ว</div></div>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="result-icon">✅</div>
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-detail" id="resultDetail"></div>
+    </div>
+
+    <div class="sec-title">🚌 เลือกรถที่ต้องการจอง</div>
+    <div id="busFullAlert" class="alert alert-danger" style="display:none">
+      <span class="alert-icon">🚫</span>
+      <div><strong>ปิดระบบจอง</strong> — รถทุกคันเต็มแล้ว</div>
+    </div>
+    <div class="bus-grid" id="busGrid"></div>
+
+    <div class="form-card" id="bookingForm">
+      <div class="sec-title">📝 กรอกข้อมูลการจอง</div>
+      <div class="form-row">
+        <label>เลือกชื่อ นศท. <span style="color:var(--red)">*</span></label>
+        <select id="nameSelect" onchange="onNameSelect(this.value)">
+          <option value="">-- กดเลือกชื่อ นศท. --</option>
+        </select>
+        <div class="form-hint">กดเลือกชื่อจากรายการ ข้อมูลจะขึ้นอัตโนมัติ</div>
+      </div>
+      <input type="hidden" id="stdId"/>
+      <div class="form-row">
+        <label>ชื่อ-นามสกุล</label>
+        <input type="text" id="stdName" readonly style="background:#f8f9fa;cursor:not-allowed;font-weight:600" placeholder="จะขึ้นอัตโนมัติเมื่อเลือกชื่อ"/>
+      </div>
+      <div class="form-row">
+        <label>ประเภท นศท.</label>
+        <input type="text" id="stdGenderDisplay" readonly style="background:#f8f9fa;cursor:not-allowed;font-weight:600" placeholder="จะขึ้นอัตโนมัติ"/>
+        <input type="hidden" id="stdGender"/>
+      </div>
+      <div class="form-row">
+        <label>รถที่เลือก</label>
+        <input type="text" id="selectedBusDisplay" readonly style="background:#f8f9fa;cursor:not-allowed" placeholder="กดเลือกจากการ์ดรถด้านบน"/>
+        <input type="hidden" id="selectedBus"/>
+      </div>
+      <div class="alert alert-warning" id="genderWarn" style="display:none">
+        <span class="alert-icon">⚠️</span>
+        <div id="genderWarnMsg">ประเภทไม่ตรงกับรถที่กำหนด</div>
+      </div>
+      <button class="btn-primary" id="btnBook" onclick="submitBooking()">🚌 ยืนยันจอง 945 บาท</button>
+    </div>
+  </div>
+
+  <!-- TAB STATUS -->
+  <div id="tab-status" class="tab-content">
+    <div class="sec-title">📊 สถานะรถแต่ละคัน</div>
+    <div id="statusDetail"><div style="text-align:center;padding:30px;color:var(--slate-muted)">กำลังโหลด...</div></div>
+  </div>
+
+  <!-- TAB ADMIN -->
+  <div id="tab-admin" class="tab-content">
+    <div class="sec-title">🔐 ผู้ดูแลระบบ</div>
+    <div class="form-card">
+      <div class="form-row">
+        <label>รหัสผ่านผู้ดูแล</label>
+        <input type="password" id="adminPass" placeholder="กรอกรหัสผ่าน" onkeydown="if(event.key==='Enter')adminLogin()"/>
+      </div>
+      <button class="btn-primary" onclick="adminLogin()">เข้าสู่ระบบ</button>
+    </div>
+    <div id="adminPanel" style="display:none">
+      <div class="alert alert-success"><span class="alert-icon">✅</span><div>เข้าสู่ระบบสำเร็จ · โหมดผู้ดูแลระบบ</div></div>
+
+      <!-- อนุมัติรายคัน -->
+      <div class="form-card">
+        <div class="sec-title">✅ อนุมัติการจอง</div>
+        <div class="form-row">
+          <label>เลือกรถ</label>
+          <select id="adminBusSelect" onchange="loadPassengers()">
+            <option value="">-- เลือกรถคันที่ต้องการ --</option>
+            <option value="1">คันที่ 1 · แดง (RED) · ชาย</option>
+            <option value="2">คันที่ 2 · เขียว (GREEN) · ชาย</option>
+            <option value="3">คันที่ 3 · น้ำเงิน (BLUE) · ชาย</option>
+            <option value="4">คันที่ 4 · เหลือง (YELLOW) · ชาย</option>
+            <option value="5">คันที่ 5 · ม่วง (PURPLE) · ชาย</option>
+            <option value="6">คันที่ 6 · ฟ้า (CYAN) · ชาย</option>
+            <option value="7">คันที่ 7 · ชมพู (PINK) · หญิง</option>
+            <option value="8">คันที่ 8 · น้ำตาล (BROWN) · หญิง</option>
+          </select>
+        </div>
+        <div id="passengerList"></div>
+        <div id="batchBar" style="display:none">
+          <div class="batch-bar">
+            <label><input type="checkbox" id="checkAll" onchange="toggleCheckAll(this)"> เลือกทั้งหมด</label>
+            <div style="display:flex;gap:8px">
+              <button class="btn-secondary" onclick="batchApprove(true)" style="font-size:12px;padding:7px 12px">✅ อนุมัติที่เลือก</button>
+              <button class="btn-secondary" onclick="batchApprove(false)" style="font-size:12px;padding:7px 12px;background:var(--amber-bg);color:#92400e">↩ ยกเลิกที่เลือก</button>
+            </div>
+          </div>
+        </div>
+        <div id="passExportRow" style="display:none;margin-top:10px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn-secondary" style="flex:1;min-width:120px" onclick="printPassList()">🖨️ พิมพ์รายชื่อ</button>
+            <button class="btn-secondary" style="flex:1;min-width:120px" onclick="exportCSV()">📥 ส่งออก CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- พิมพ์ทุกคัน -->
+      <div class="form-card">
+        <div class="sec-title">🖨️ ส่งออกรายชื่อทุกคัน</div>
+        <p style="font-size:13px;color:var(--slate-muted);margin-bottom:12px">พิมพ์รายชื่อผู้จองครบทั้ง 8 คันในครั้งเดียว</p>
+        <button class="btn-primary" onclick="printAllBuses()">🖨️ พิมพ์รายชื่อทั้ง 8 คัน</button>
+      </div>
+
+      <!-- ยกเลิกจอง -->
+      <div class="form-card">
+        <div class="sec-title">🗑️ ยกเลิกการจอง</div>
+        <div class="form-row">
+          <label>เลขประจำตัวประชาชน (13 หลัก) หรือ เลข นศท.</label>
+          <input type="text" id="cancelId" placeholder="ป้อนเลข 13 หลัก หรือ เลข นศท."/>
+        </div>
+        <button class="btn-primary btn-danger" onclick="cancelBooking()">🗑️ ยกเลิกการจอง</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <div class="modal-hdr">
+      <span style="font-size:26px">🚌</span>
+      <div>
+        <h2>ยืนยันการจองรถ</h2>
+        <p style="font-size:12.5px;opacity:.85;margin-top:2px">กรุณาตรวจสอบข้อมูลก่อนยืนยัน</p>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div id="confirmDetail" style="background:#f8f9fa;border-radius:10px;padding:14px;font-size:14px;line-height:2"></div>
+      <div class="alert alert-warning" style="margin-top:12px">
+        <span class="alert-icon">⚠️</span>
+        <div>เมื่อยืนยันแล้ว <strong>ไม่สามารถเปลี่ยนรถได้</strong> หากต้องการเปลี่ยน ต้องติดต่อครูแซม</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">ยกเลิก</button>
+      <button class="btn-confirm" id="btnConfirm" onclick="confirmBooking()">✅ ยืนยันจอง</button>
+    </div>
+  </div>
+</div>
+
+<footer>ระบบจองรถโดยสาร นศท. ชั้นปีที่ 1 · โรงเรียนมัธยมวัดหนองแขม · ปีการศึกษา 2569<br>ติดต่อปัญหา: ครูแซม ห้องหลังเสาธง</footer>
+
+<script>
+// ===== CONFIG =====
+const SCRIPT_URL = ''; // ← วาง URL Apps Script ที่นี่
+const MAX_PER_BUS = 23;
+const TOTAL_BUSES = 8;
+const ADMIN_PASSWORD = 'SAM2206';
+const BUS_COLORS = {
+  1:'#e05252',2:'#4a7c59',3:'#2563eb',4:'#d97706',
+  5:'#7c3aed',6:'#0891b2',7:'#db2777',8:'#b45309'
+};
+const BUS_LABELS = {
+  1:'สีแดง (RED)',2:'สีเขียว (GREEN)',3:'สีน้ำเงิน (BLUE)',
+  4:'สีเหลือง (YELLOW)',5:'สีม่วง (PURPLE)',6:'สีฟ้า (CYAN)',
+  7:'สีชมพู (PINK)',8:'สีน้ำตาล (BROWN)'
+};
+const BUS_GENDER = {1:'ชาย',2:'ชาย',3:'ชาย',4:'ชาย',5:'ชาย',6:'ชาย',7:'หญิง',8:'หญิง'};
+
+const STUDENT_DB = [
+  // ===== ชาย 183 คน =====
+  {"id":"1102300144538","name":"นายกนกพัชร์ โคกแก้ว","gender":"ชาย"},
+  {"id":"1749800515196","name":"นายกรีเทพ รอดพงษ์พันธ์","gender":"ชาย"},
+  {"id":"1104000276848","name":"นายกฤษกร บุญเหลา","gender":"ชาย"},
+  {"id":"1102300144694","name":"นายกฤษฎา โทสิงห์","gender":"ชาย"},
+  {"id":"1102004242407","name":"นายกลทีบ์ บุญชูวงค์","gender":"ชาย"},
+  {"id":"1709901869724","name":"นายกวิน ตันสงวน","gender":"ชาย"},
+  {"id":"1104000288561","name":"นายกวี คุณวัฒนนิธิ","gender":"ชาย"},
+  {"id":"1720900381720","name":"นายก้องฟ้า แจ้งวิถี","gender":"ชาย"},
+  {"id":"1103400174570","name":"นายกันตพัฒน์ บุญธนาทรัพย์","gender":"ชาย"},
+  {"id":"1102004244183","name":"นายกันตพิชญ์ เดียวตระกูล","gender":"ชาย"},
+  {"id":"1749901362182","name":"นายกันต์ระพี เสริมจันทร์","gender":"ชาย"},
+  {"id":"1103500099600","name":"นายกำชัย กนกวรกาญจน์","gender":"ชาย"},
+  {"id":"1101501451917","name":"นายกิตติกันต์ ดวงตา","gender":"ชาย"},
+  {"id":"1739902535404","name":"เด็กชายกิตติธัช ขาวสุธรรม","gender":"ชาย"},
+  {"id":"1749901325571","name":"นายกิตตินันท์ บุญครอง","gender":"ชาย"},
+  {"id":"1749700183663","name":"นายกิตติพัฒน์ สร้อยวัน","gender":"ชาย"},
+  {"id":"1749800519434","name":"นายกิตติภัค แก้วประไพ","gender":"ชาย"},
+  {"id":"1329200081946","name":"นายกิตติศักดิ์ คำเนตร","gender":"ชาย"},
+  {"id":"1102004179021","name":"นายกิตติศักดิ์ ตานี","gender":"ชาย"},
+  {"id":"1102004258559","name":"นายกิตติศักดิ์ อุทะกะ","gender":"ชาย"},
+  {"id":"1103101161590","name":"เด็กชายกิติภณ ทองเชื้อ","gender":"ชาย"},
+  {"id":"1104000297080","name":"นายกิติศักดิ์ นวดกลาง","gender":"ชาย"},
+  {"id":"1749800517164","name":"นายเกียรติศักดิ์ วัฒนเฉลิม","gender":"ชาย"},
+  {"id":"1100801691564","name":"นายโกมินทร์ โศรกหาย","gender":"ชาย"},
+  {"id":"1749800524764","name":"นายคณพศ ธิติมนัส","gender":"ชาย"},
+  {"id":"1749700183990","name":"นายคันธทรัพ น่วมไม้พุ่ม","gender":"ชาย"},
+  {"id":"1102004138120","name":"นายจเรวัฒน์ ปรางมณี","gender":"ชาย"},
+  {"id":"1102300146905","name":"เด็กชายจักรพงศ์ บุญประคอง","gender":"ชาย"},
+  {"id":"1102400249382","name":"นายจักรภัทร โฆษิตตารักษ์","gender":"ชาย"},
+  {"id":"1102004254103","name":"นายจารุพัฒน์ พรมมินทร์","gender":"ชาย"},
+  {"id":"1749700186557","name":"เด็กชายจิรกิตติ์ เกงขุนทด","gender":"ชาย"},
+  {"id":"1101501456668","name":"นายจิรภาส จันทร์ม่วง","gender":"ชาย"},
+  {"id":"1102004236431","name":"นายจิรัฏฐพล สมโต๊ะ","gender":"ชาย"},
+  {"id":"1104800023138","name":"นายจิรายุ สกุลวิริยะชัย","gender":"ชาย"},
+  {"id":"1102004260006","name":"นายจิรายุ สำเนียงเพราะ","gender":"ชาย"},
+  {"id":"1129902258961","name":"นายจุลภักดิ์ ปิ่นทองพันธ์","gender":"ชาย"},
+  {"id":"1749800531141","name":"นายเจนวิทย์ ศรีศุภผุดผ่อง","gender":"ชาย"},
+  {"id":"1749901352683","name":"นายเจ้าคุณ ศรีสมุทรนาค","gender":"ชาย"},
+  {"id":"1102004254359","name":"นายชนกันต์ วิวัฒน์ชัยตระกูล","gender":"ชาย"},
+  {"id":"1100401522498","name":"นายชนาธิป สีสัน","gender":"ชาย"},
+  {"id":"1749800513142","name":"นายชยพล รุจิวรภิญโญ","gender":"ชาย"},
+  {"id":"1749901331058","name":"นายชยพล สักยะพรต","gender":"ชาย"},
+  {"id":"1102200318810","name":"นายชยิน สอนสุข","gender":"ชาย"},
+  {"id":"1749800542479","name":"เด็กชายชัยมงคล นาคงยืน","gender":"ชาย"},
+  {"id":"1104000250211","name":"นายชัยสิทธ์ พัสลม","gender":"ชาย"},
+  {"id":"1103101134011","name":"นายชุติมันต์ สรรพาภูสกุล","gender":"ชาย"},
+  {"id":"1102004223186","name":"นายญานภัทร พันธุ์งาม","gender":"ชาย"},
+  {"id":"1749901346691","name":"นายฐสิษฐ์ บุญญาพานิช","gender":"ชาย"},
+  {"id":"1749800526295","name":"นายฐิติภัทร อ่องลา","gender":"ชาย"},
+  {"id":"1102200293540","name":"นายณชพล สุขไพร่","gender":"ชาย"},
+  {"id":"1102004266594","name":"เด็กชายณฐกร ห่วงสายทอง","gender":"ชาย"},
+  {"id":"1300201345027","name":"เด็กชายณฤเดช ริดจะโป๊ะ","gender":"ชาย"},
+  {"id":"1749800522401","name":"นายณัฐตนันท์ ใจอารีย์","gender":"ชาย"},
+  {"id":"1102300141695","name":"นายณัฐนนท์ ปล้องบรรจง","gender":"ชาย"},
+  {"id":"1102004148389","name":"นายณัฐพร แซ่หวอง","gender":"ชาย"},
+  {"id":"1749800530659","name":"นายณัฐพล กองพิมพ์","gender":"ชาย"},
+  {"id":"1749800517482","name":"นายณัฐภณ ทองวิชิต","gender":"ชาย"},
+  {"id":"1104000278361","name":"นายณัฐวัฒน์ เทียมถม","gender":"ชาย"},
+  {"id":"1749800515447","name":"นายณัฐวัตน์ ใจกล้า","gender":"ชาย"},
+  {"id":"1102004189689","name":"นายดนัย วิริยะธนสิทธิ์","gender":"ชาย"},
+  {"id":"1101801653787","name":"นายดนุภัทร ชัยรักษ์พีระกุล","gender":"ชาย"},
+  {"id":"1570501346949","name":"นายติณณภพ บุญแก้ว","gender":"ชาย"},
+  {"id":"1749800524632","name":"นายทรงพล ฉิมขัณฑ์","gender":"ชาย"},
+  {"id":"1101801621265","name":"นายทศพร ลี้อนุสรณ์สกุล","gender":"ชาย"},
+  {"id":"1100401523168","name":"นายทิพากร สามัญเขตรกิจ","gender":"ชาย"},
+  {"id":"1749400119897","name":"นายทิวากร เกาะกลาง","gender":"ชาย"},
+  {"id":"1749800502060","name":"นายธนโชติ มะนุ","gender":"ชาย"},
+  {"id":"1102004142461","name":"นายธนพัฒน์ เพ็งศรี","gender":"ชาย"},
+  {"id":"1104000256090","name":"นายธนภัทร ปะวะเสนะ","gender":"ชาย"},
+  {"id":"1102170139319","name":"นายธนวัฒน์ คำควร","gender":"ชาย"},
+  {"id":"1104000306003","name":"เด็กชายธนวัฒน์ ตะกรุดทอง","gender":"ชาย"},
+  {"id":"1104000289010","name":"นายธนวัฒน์ ถวายเทียน","gender":"ชาย"},
+  {"id":"1102004171968","name":"นายธนวัฒน์ ทรัพย์ถวิลหา","gender":"ชาย"},
+  {"id":"1104000299236","name":"นายธนวิชญ์ สุดาจันทร์","gender":"ชาย"},
+  {"id":"1104000300480","name":"นายธนัยนันท์ อินตัน","gender":"ชาย"},
+  {"id":"1329400130681","name":"นายธนิสร ดาวได้รัมย์","gender":"ชาย"},
+  {"id":"1104000294510","name":"นายธรรมนูญ อนงค์ชัย","gender":"ชาย"},
+  {"id":"1100202058406","name":"นายธันวา ดอกบัวซ้อน","gender":"ชาย"},
+  {"id":"1102004220195","name":"นายธันวา บูรณ์เจริญ","gender":"ชาย"},
+  {"id":"1740101124980","name":"นายธิติคุณ ศรีสุระ","gender":"ชาย"},
+  {"id":"1102004279696","name":"เด็กชายธีรภัทร เจตนะเสน","gender":"ชาย"},
+  {"id":"1749700179437","name":"นายนนทวัฒน์ เทศนา","gender":"ชาย"},
+  {"id":"1749800521285","name":"นายนพเก้า ชมพูเพชร์","gender":"ชาย"},
+  {"id":"1749700176373","name":"นายนภทีป์ บุญญรักษ์","gender":"ชาย"},
+  {"id":"1104000272320","name":"นายนภัสกร คาดพันธโน","gender":"ชาย"},
+  {"id":"1102200318097","name":"นายนะโม เทพหัสดิน ณ อยุธยา","gender":"ชาย"},
+  {"id":"1101801686961","name":"เด็กชายนัทธพงศ์ จำปาแดง","gender":"ชาย"},
+  {"id":"1102004227106","name":"นายนัทธพงศ์ รุ่งเครือ","gender":"ชาย"},
+  {"id":"1749800524730","name":"นายนิธิกร บุญแก้ว","gender":"ชาย"},
+  {"id":"1749800521943","name":"นายนิธิฤทธิ์ เกตุแก้ว","gender":"ชาย"},
+  {"id":"1104000292410","name":"นายนิธิศ ระบายเพชร","gender":"ชาย"},
+  {"id":"1102004257731","name":"นายนิปุณ ผลผักแว่น","gender":"ชาย"},
+  {"id":"1749800528328","name":"นายบรรณสรณ์ ล็อก","gender":"ชาย"},
+  {"id":"1749800533577","name":"นายบุณยกร โห้รอด","gender":"ชาย"},
+  {"id":"1102200321136","name":"เด็กชายปัญนทัศน์ ดีเฉลา","gender":"ชาย"},
+  {"id":"1309903878457","name":"นายปัณณวัฒน์ เฉยรุ้ง","gender":"ชาย"},
+  {"id":"1104000305767","name":"เด็กชายปัณณวิชญ์ แก้วประสิทธิ์","gender":"ชาย"},
+  {"id":"1449100093054","name":"นายปัณณวิชญ์ คำดี","gender":"ชาย"},
+  {"id":"1102004269216","name":"เด็กชายปัณณวิชญ์ หงษ์ชู","gender":"ชาย"},
+  {"id":"1102170156566","name":"เด็กชายปัณณวิชญ์ อนันตอมรวิชญ์","gender":"ชาย"},
+  {"id":"1209702645995","name":"นายปาณัสม์ เผื่อนขวัญ","gender":"ชาย"},
+  {"id":"1102004206966","name":"นายปิยะ เปรมปราศรัย","gender":"ชาย"},
+  {"id":"1104000291685","name":"นายปิยะพันธ์ หกพันนา","gender":"ชาย"},
+  {"id":"1749800529090","name":"นายปุณชรัสมิ์ แก้วเปี่ยม","gender":"ชาย"},
+  {"id":"1103704528215","name":"นายพชธกร สิโนทก","gender":"ชาย"},
+  {"id":"1102300145739","name":"เด็กชายพรพรหม ฉายประเสริฐศรี","gender":"ชาย"},
+  {"id":"1102004111141","name":"นายพศวัต แช่มช้อย","gender":"ชาย"},
+  {"id":"1102300141849","name":"นายพสิษฐ์ เหี่ยวนา","gender":"ชาย"},
+  {"id":"1479900922195","name":"นายพาณิชย์ บุตรสุวรรณ์","gender":"ชาย"},
+  {"id":"1718800149393","name":"นายพิชญทัศน์ พันธ์ภักดี","gender":"ชาย"},
+  {"id":"1102004287753","name":"เด็กชายพิชญภูมิ ศรีสุหู้","gender":"ชาย"},
+  {"id":"1101801665009","name":"นายพิสิษฐ์ แซ่เฮ้ง","gender":"ชาย"},
+  {"id":"1104000290913","name":"นายพีระพล ปานพลอย","gender":"ชาย"},
+  {"id":"1102004208578","name":"นายพุฒิพงศ์ มากกลิ่น","gender":"ชาย"},
+  {"id":"1102200310100","name":"นายเพชรนารายณ์ อินทรีย์วงศ์","gender":"ชาย"},
+  {"id":"1102004243462","name":"นายเพชรปิติ พรมมา","gender":"ชาย"},
+  {"id":"1749800525001","name":"นายภคิน ธันยากิตติกุล","gender":"ชาย"},
+  {"id":"1104000293670","name":"นายภัทรดนัย พูนกำเนิด","gender":"ชาย"},
+  {"id":"1329200079151","name":"นายภาคภูมิ สัจจะวาที","gender":"ชาย"},
+  {"id":"1104000297268","name":"นายภาณุวัฒน์ วรรณสุข","gender":"ชาย"},
+  {"id":"1739200027085","name":"นายภานุรุจ วิภาคพจนกิจ","gender":"ชาย"},
+  {"id":"1749800516796","name":"นายภูมิณฤทธิ์ สุกแตง","gender":"ชาย"},
+  {"id":"1749901366081","name":"นายเมธิชัย วงษ์ขอม","gender":"ชาย"},
+  {"id":"1102300141245","name":"นายยุทธพิชัย ใจเที่ยง","gender":"ชาย"},
+  {"id":"1102004234218","name":"นายโยธิน ชลานนท์","gender":"ชาย"},
+  {"id":"1102300143558","name":"นายรณกร ศรีบุญเรือง","gender":"ชาย"},
+  {"id":"1104000295109","name":"นายรพีพัฒน์ จูเอี่ยม","gender":"ชาย"},
+  {"id":"1839100010899","name":"นายรหัท คงสายทองคำ","gender":"ชาย"},
+  {"id":"1102300140052","name":"นายราชฤทธิ์ สิบตรีจรัญ","gender":"ชาย"},
+  {"id":"1559600067264","name":"นายวงศธร บวรดิเรกโชค","gender":"ชาย"},
+  {"id":"1104301226149","name":"นายวรภัทร วงศ์วิเชียร","gender":"ชาย"},
+  {"id":"1479900972648","name":"เด็กชายวรเมธ แก้วไพศาล","gender":"ชาย"},
+  {"id":"1829900358202","name":"นายวรวิทย์ เดชจินดา","gender":"ชาย"},
+  {"id":"1102004217224","name":"นายวริศ หริรักษ์หรรษา","gender":"ชาย"},
+  {"id":"1102700850227","name":"นายวริษฐ์ มณีปากรณ์","gender":"ชาย"},
+  {"id":"1104000290140","name":"นายวสวัตติ์ มะหัด","gender":"ชาย"},
+  {"id":"1104000256855","name":"นายวัชรพงษ์ อุราเลิศ","gender":"ชาย"},
+  {"id":"1101801597933","name":"นายวัชเรนทร์ บุนนาค","gender":"ชาย"},
+  {"id":"1679900813769","name":"นายวิชชยากร ธีระภิญโญ","gender":"ชาย"},
+  {"id":"1749800528786","name":"นายวิชญะ แสงงาม","gender":"ชาย"},
+  {"id":"1749800513746","name":"นายวิรุฬห์ฉัตร หนูทอง","gender":"ชาย"},
+  {"id":"1104000274624","name":"นายวิวิธชัย ยิ้มศรีแพร","gender":"ชาย"},
+  {"id":"1549900830826","name":"นายวุฒิพงษ์ เพชรปัญญา","gender":"ชาย"},
+  {"id":"1104000286681","name":"นายศตพร สุขะมงคลสวัสดิ์","gender":"ชาย"},
+  {"id":"1749400121336","name":"นายศรายุท มีจินดา","gender":"ชาย"},
+  {"id":"1102004182269","name":"นายศิขริน อัศวรัตนชัยภูมิ","gender":"ชาย"},
+  {"id":"1104000308464","name":"เด็กชายศิรสิทธิ์ ศรีอุทัย","gender":"ชาย"},
+  {"id":"1749800517202","name":"นายศิวัช พุ่มวิไล","gender":"ชาย"},
+  {"id":"1103400183650","name":"นายศิวายุ ศิริเวช","gender":"ชาย"},
+  {"id":"1102300141792","name":"นายศีลชัย สถาพร","gender":"ชาย"},
+  {"id":"1749800508343","name":"นายศุภกร เกษประเสริฐ","gender":"ชาย"},
+  {"id":"1209601587663","name":"นายศุภกิจ คุมดี","gender":"ชาย"},
+  {"id":"1104000285359","name":"นายศุภกิจ แซ่เจีย","gender":"ชาย"},
+  {"id":"1350101913503","name":"นายศุภณัฐ ก้องเวหา","gender":"ชาย"},
+  {"id":"1102004253913","name":"นายสงกรานต์ น้อยใหญ่","gender":"ชาย"},
+  {"id":"1749901284319","name":"นายสนั่นชัย รี่แตง","gender":"ชาย"},
+  {"id":"1102004174223","name":"นายสมบูรณ์ แก้วชิงดวง","gender":"ชาย"},
+  {"id":"1102004247077","name":"นายสฤษฎ์พงศ์ ชูกลิ่น","gender":"ชาย"},
+  {"id":"1104000297403","name":"นายสหัสทัย รักษาธรรม","gender":"ชาย"},
+  {"id":"1102004224671","name":"นายสาริษฐ์ คำอนุกูล","gender":"ชาย"},
+  {"id":"1104000295001","name":"นายสิทธิกร ศรีผ่าน","gender":"ชาย"},
+  {"id":"1102300143221","name":"นายสิทธิโชค จงศิริโรจน์กุล","gender":"ชาย"},
+  {"id":"1104000292983","name":"นายสิทธินันต์ บุญมาก","gender":"ชาย"},
+  {"id":"1749800507151","name":"นายสุพล กลิ่นเพ็ชร","gender":"ชาย"},
+  {"id":"1800901422062","name":"นายสุภัทรพงศ์ เรืองเมือง","gender":"ชาย"},
+  {"id":"1102004145045","name":"นายสุรยุทธ อยู่บุญ","gender":"ชาย"},
+  {"id":"1104000287050","name":"นายหฤษฎ อนันท์กัลยกร","gender":"ชาย"},
+  {"id":"1749901275204","name":"นายอดิศร ทิพยเนตร","gender":"ชาย"},
+  {"id":"1104000289621","name":"นายอธิคม หลักคำ","gender":"ชาย"},
+  {"id":"1104000293629","name":"นายอธิภัทร สายศิริ","gender":"ชาย"},
+  {"id":"1102300146361","name":"เด็กชายอธิสรรค์ ฐิติเกษมภิรมย์","gender":"ชาย"},
+  {"id":"1102004188712","name":"นายอนุกูล พละศักดิ์","gender":"ชาย"},
+  {"id":"1104000283216","name":"นายอภินันท์ กันทาวงค์","gender":"ชาย"},
+  {"id":"1102300141181","name":"นายอภินันท์ พานทอง","gender":"ชาย"},
+  {"id":"1749800530594","name":"นายอมรเทพ พานทิม","gender":"ชาย"},
+  {"id":"1102004246887","name":"นายอัครินทร์ พงษ์นัยรัตน์","gender":"ชาย"},
+  {"id":"1101700506649","name":"เด็กชายอาทิชัย อภิวัฒน์ตั้งสกุล","gender":"ชาย"},
+  {"id":"1104000296300","name":"นายอาทิตย์ เอกวงษ์","gender":"ชาย"},
+  {"id":"1102300141300","name":"นายอานนท์ กล่อมบรรจง","gender":"ชาย"},
+  {"id":"1102300145704","name":"นายอานนท์ ตันชนะประดิษฐ์","gender":"ชาย"},
+  {"id":"1104000290361","name":"นายอานนท์ ทองย้อย","gender":"ชาย"},
+  {"id":"1104000299147","name":"นายอิทธิพล ตันสงวน","gender":"ชาย"},
+  {"id":"1104000306429","name":"เด็กชายเอื้ออังกูร สอาดใจ","gender":"ชาย"},
+  // ===== หญิง 48 คน =====
+  {"id":"1104000283828","name":"นางสาวกมลวรรณ นามวงศ์","gender":"หญิง"},
+  {"id":"1579901430091","name":"นางสาวกัญญาภัค แซ่ฝาง","gender":"หญิง"},
+  {"id":"1103101152230","name":"นางสาวกันต์ธิดา ปิ่นแก้ว","gender":"หญิง"},
+  {"id":"1749800507134","name":"นางสาวกัลยกร โสพิศวัฒนวงศ์","gender":"หญิง"},
+  {"id":"1749800515919","name":"นางสาวขวัญอุมา เปี่ยมอยู่","gender":"หญิง"},
+  {"id":"1104000286321","name":"นางสาวจิราพัชร มิสา","gender":"หญิง"},
+  {"id":"1102004209311","name":"นางสาวญาดา แกประโคน","gender":"หญิง"},
+  {"id":"1749800515439","name":"นางสาวณัชชพรรณ พลขันธ์","gender":"หญิง"},
+  {"id":"1749901348821","name":"นางสาวณัฏฐณิชา คณาอาสนรมย์","gender":"หญิง"},
+  {"id":"1709901846015","name":"นางสาวณัฐทิมา ดวงจันทร์","gender":"หญิง"},
+  {"id":"1749800515072","name":"นางสาวณิชาภัทร มัทธิพันธุ์","gender":"หญิง"},
+  {"id":"1749800524578","name":"นางสาวตุลดา กุลชาดิษย์","gender":"หญิง"},
+  {"id":"1359900181650","name":"นางสาวถิรนันท์ ละครวงษ์","gender":"หญิง"},
+  {"id":"1104000284492","name":"นางสาวทิฆัมพร ทิพยเนตร","gender":"หญิง"},
+  {"id":"1104000294897","name":"นางสาวธนัชชา ธนาวัฒนดำรง","gender":"หญิง"},
+  {"id":"1200901601809","name":"นางสาวธัญชนก บุญยงค์","gender":"หญิง"},
+  {"id":"1102300146859","name":"เด็กหญิงนันทิชา อินทรสวาท","gender":"หญิง"},
+  {"id":"1102004226045","name":"นางสาวปฐมพร นิยมจันทร์","gender":"หญิง"},
+  {"id":"1139600615460","name":"นางสาวปณตพร สวนจุ้ย","gender":"หญิง"},
+  {"id":"1104000286517","name":"นางสาวปรียานุช แสงดอกไม้","gender":"หญิง"},
+  {"id":"1739902487191","name":"นางสาวปวริศร์ชา พงกันยา","gender":"หญิง"},
+  {"id":"1739902487175","name":"นางสาวปวริศร์ฐา พงกันยา","gender":"หญิง"},
+  {"id":"1102004227718","name":"นางสาวปวีณ์นุช ภู่สุด","gender":"หญิง"},
+  {"id":"1100801694873","name":"นางสาวปาลิตา สุวรรณนภาศรี","gender":"หญิง"},
+  {"id":"1104000291472","name":"นางสาวปิยาพัชร อาจอาษา","gender":"หญิง"},
+  {"id":"1104000286886","name":"นางสาวปูริดา ตราทอง","gender":"หญิง"},
+  {"id":"1104000255352","name":"นางสาวพรรษา ศรีวงค์","gender":"หญิง"},
+  {"id":"1749800512057","name":"นางสาวแพรพลอย เสงี่ยม","gender":"หญิง"},
+  {"id":"1648900145617","name":"นางสาวโภคิยา ศรีเตว็ด","gender":"หญิง"},
+  {"id":"1100401526060","name":"นางสาวมนัสนันท์ พรลาภสิริสุข","gender":"หญิง"},
+  {"id":"1102004262271","name":"เด็กหญิงมัฎศิกาณต์ ใหม่วงค์","gender":"หญิง"},
+  {"id":"1739902522523","name":"นางสาวมีนา สายนุช","gender":"หญิง"},
+  {"id":"1104000278433","name":"นางสาวรักษิตา ชะอ่ำ","gender":"หญิง"},
+  {"id":"1102004162691","name":"นางสาวรุ่งกานต์ เกิดเกษม","gender":"หญิง"},
+  {"id":"1102170147044","name":"นางสาวลักษมีลาวัณย์ จุทะนันท์","gender":"หญิง"},
+  {"id":"1339901108760","name":"นางสาววนิษธิดา คณะพรม","gender":"หญิง"},
+  {"id":"1809902653279","name":"นางสาววรรณวริน เพ็ชรสงค์","gender":"หญิง"},
+  {"id":"1102004178831","name":"นางสาววันใหม่ จริยานุวัตร์","gender":"หญิง"},
+  {"id":"1100801701365","name":"เด็กหญิงวิลันดา เป้าเข็ม","gender":"หญิง"},
+  {"id":"1328900113700","name":"นางสาววิสุชาดา เปรียบยอดยิ่ง","gender":"หญิง"},
+  {"id":"1104000293424","name":"นางสาวศศิธร เกิดโภคา","gender":"หญิง"},
+  {"id":"1102004202596","name":"นางสาวศิริกร แย้มพันธ์","gender":"หญิง"},
+  {"id":"1100202070228","name":"นางสาวศิริวิมล ศรีจันทร์","gender":"หญิง"},
+  {"id":"1749901326097","name":"นางสาวสิริกัญญา หอมไม่หาย","gender":"หญิง"},
+  {"id":"1749800541120","name":"นางสาวสุคนธ์ รุจสันต์","gender":"หญิง"},
+  {"id":"1609901018181","name":"นางสาวสุภาวดี ปรางสร","gender":"หญิง"},
+  {"id":"1102300145666","name":"นางสาวหนึ่งนภา สู่เสน","gender":"หญิง"},
+  {"id":"1102200319263","name":"นางสาวอณัญญา วงศ์จิรวัฒนกุล","gender":"หญิง"}
+];
+
+// ===== STATE =====
+let busData = {};
+let selectedBusNum = null;
+let pendingBooking = null;
+let lastPassData = null;
+
+window.onload = () => {
+  populateDropdown();
+  loadBusStatus();
+};
+
+// ===== LOAD =====
+async function loadBusStatus() {
+  if (!SCRIPT_URL) { renderBusCards({}); return; }
+  try {
+    const r = await fetch(SCRIPT_URL + '?action=status');
+    const d = await r.json();
+    if (d.success) { busData = d.buses; renderBusCards(busData); updateStats(busData); renderStatus(busData); }
+  } catch(e) { showAlert('ไม่สามารถเชื่อมต่อระบบได้: ' + e.message, 'danger'); renderBusCards({}); }
+}
+
+// ===== RENDER BUS CARDS =====
+function renderBusCards(data) {
+  const grid = document.getElementById('busGrid');
+  let allFull = true, html = '';
+  for (let i = 1; i <= TOTAL_BUSES; i++) {
+    const cnt = data[i]?.count || 0;
+    const pass = data[i]?.passengers || [];
+    const full = cnt >= MAX_PER_BUS;
+    const sel = selectedBusNum == i;
+    if (!full) allFull = false;
+    const pct = Math.round(cnt / MAX_PER_BUS * 100);
+    const barC = pct >= 80 ? '#e05252' : pct >= 60 ? '#d97706' : '#059669';
+    const cntC = pct >= 80 ? 'c-red' : pct >= 60 ? 'c-amber' : 'c-green';
+    const badge = full ? `<span class="badge-full">🚫 เต็มแล้ว</span>` : `<span class="badge-open">✨ ว่าง ${MAX_PER_BUS-cnt} ที่</span>`;
+    const gLbl = BUS_GENDER[i]==='หญิง' ? '👩 หญิง' : '👨 ชาย';
+    const approvedSet = new Set(pass.filter(p=>p.status==='อนุมัติแล้ว').map(p=>p.stdId));
+    let dots = '';
+    for (let s=0;s<MAX_PER_BUS;s++){
+      let dc='#f1f5f9';
+      if(s<pass.length){ const p=pass[s]; dc=approvedSet.has(p.stdId)?'#059669':'#d97706'; }
+      dots += `<div class="seat-dot" style="background:${dc}"></div>`;
+    }
+    html += `<div class="bus-card ${full?'full':''} ${sel?'selected':''}" id="bc${i}" onclick="${full?'':'selectBus('+i+')'}" style="${sel?`border-color:${BUS_COLORS[i]};`:''}">
+      <div class="bus-hdr" style="background:${full?'#94a3b8':BUS_COLORS[i]}">
+        <div class="bus-icon">🚌</div>
+        <div class="bus-label"><h3>รถคันที่ ${i}</h3><p>${BUS_LABELS[i]} · ${gLbl}</p></div>
+      </div>
+      <div class="bus-body">
+        <div class="cap-bar-wrap"><div class="cap-bar" style="width:${pct}%;background:${barC}"></div></div>
+        <div class="cap-text"><span class="${cntC} cap-count">${cnt}/${MAX_PER_BUS}</span><span>${pct}%</span></div>
+        ${badge}
+        <div class="seat-map">${dots}</div>
+      </div>
+    </div>`;
+  }
+  grid.innerHTML = html;
+  const allFullEl = document.getElementById('busFullAlert');
+  const formEl = document.getElementById('bookingForm');
+  if (allFull && Object.keys(data).length > 0) { allFullEl.style.display='flex'; formEl.style.display='none'; }
+  else { allFullEl.style.display='none'; formEl.style.display='block'; }
+}
+
+function selectBus(n) {
+  selectedBusNum = n;
+  document.getElementById('selectedBus').value = n;
+  document.getElementById('selectedBusDisplay').value = `รถคันที่ ${n} · ${BUS_LABELS[n]} (${BUS_GENDER[n]})`;
+  renderBusCards(busData);
+  checkGender();
+  document.getElementById('bookingForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ===== DROPDOWN =====
+function populateDropdown() {
+  const sel = document.getElementById('nameSelect');
+  const sorted = [...STUDENT_DB].sort((a,b) => a.name.localeCompare(b.name,'th'));
+  sel.innerHTML = '<option value="">-- กดเลือกชื่อ นศท. --</option>' +
+    sorted.map(s=>`<option value="${s.id}">${s.name} (${s.gender})</option>`).join('');
+}
+
+function onNameSelect(id) {
+  if (!id) { clearForm(); return; }
+  const s = STUDENT_DB.find(s=>s.id===id);
+  if (!s) return;
+  document.getElementById('stdId').value = s.id;
+  document.getElementById('stdName').value = s.name;
+  document.getElementById('stdGender').value = s.gender;
+  document.getElementById('stdGenderDisplay').value = s.gender==='หญิง' ? '👩 นศท.หญิง (รถคันที่ 7–8)' : '👨 นศท.ชาย (รถคันที่ 1–6)';
+  checkGender();
+}
+
+function clearForm() {
+  ['stdId','stdName','stdGender','stdGenderDisplay'].forEach(id => document.getElementById(id).value='');
+}
+
+function checkGender() {
+  const g = document.getElementById('stdGender').value;
+  const n = selectedBusNum;
+  if (!g || !n) return;
+  const warn = document.getElementById('genderWarn');
+  const msg = document.getElementById('genderWarnMsg');
+  if (g !== BUS_GENDER[n]) {
+    warn.style.display='flex';
+    msg.innerHTML = `รถคันที่ ${n} สำหรับ นศท.<strong>${BUS_GENDER[n]}</strong>เท่านั้น กรุณาเลือกรถให้ตรง`;
+  } else { warn.style.display='none'; }
+}
+
+function updateStats(data) {
+  let booked=0, full=0;
+  for (let i=1;i<=TOTAL_BUSES;i++) { const c=data[i]?.count||0; booked+=c; if(c>=MAX_PER_BUS)full++; }
+  document.getElementById('statBooked').textContent = booked;
+  document.getElementById('statRemain').textContent = TOTAL_BUSES*MAX_PER_BUS - booked;
+  document.getElementById('statFull').textContent = full;
+}
+
+// ===== SUBMIT =====
+function submitBooking() {
+  const stdId = document.getElementById('stdId').value.trim();
+  const stdName = document.getElementById('stdName').value.trim();
+  const gender = document.getElementById('stdGender').value;
+  const busNum = document.getElementById('selectedBus').value;
+  if (!stdId || !stdName) { showAlert('กรุณาเลือกชื่อ นศท. จากรายการ','warning'); return; }
+  if (!busNum) { showAlert('กรุณาเลือกรถที่ต้องการจอง','warning'); return; }
+  if (gender !== BUS_GENDER[parseInt(busNum)]) { showAlert('ประเภท นศท. ไม่ตรงกับรถที่เลือก','danger'); return; }
+  pendingBooking = {stdId,stdName,gender,busNum};
+  document.getElementById('confirmDetail').innerHTML = `
+    <table style="width:100%">
+      <tr><td style="color:var(--slate-muted);width:130px">เลขประจำตัว</td><td><strong>${stdId}</strong></td></tr>
+      <tr><td style="color:var(--slate-muted)">ชื่อ-สกุล</td><td><strong>${stdName}</strong></td></tr>
+      <tr><td style="color:var(--slate-muted)">ประเภท</td><td>${gender}</td></tr>
+      <tr><td style="color:var(--slate-muted)">รถที่จอง</td><td><strong style="color:${BUS_COLORS[busNum]}">คันที่ ${busNum} · ${BUS_LABELS[busNum]}</strong></td></tr>
+      <tr><td style="color:var(--slate-muted)">ค่ารถ</td><td><strong>945 บาท</strong></td></tr>
+    </table>`;
+  document.getElementById('confirmModal').classList.add('active');
+}
+
+async function confirmBooking() {
+  if (!pendingBooking) return;
+  if (!SCRIPT_URL) { showAlert('ยังไม่ได้ตั้งค่า Script URL','warning'); closeModal(); return; }
+  const btn = document.getElementById('btnConfirm');
+  btn.innerHTML = '<span class="spinner"></span>กำลังบันทึก...'; btn.disabled=true;
+  try {
+    const p = new URLSearchParams({action:'book',...pendingBooking});
+    const r = await fetch(SCRIPT_URL+'?'+p);
+    const d = await r.json();
+    closeModal();
+    if (d.success) {
+      const rc = document.getElementById('resultCard');
+      document.getElementById('resultTitle').textContent = 'บันทึกการจองแล้ว ✅';
+      document.getElementById('resultDetail').innerHTML =
+        `${pendingBooking.stdName}<br>รถคันที่ ${pendingBooking.busNum} · ${BUS_LABELS[pendingBooking.busNum]}<br>ที่นั่งที่ ${d.seatNum}/${MAX_PER_BUS} · ค่ารถ 945 บาท
+         <div class="pending-badge">⏳ รอการตรวจสอบ/อนุมัติหลังชำระเงิน</div>`;
+      rc.style.display='block'; rc.scrollIntoView({behavior:'smooth'});
+      loadBusStatus();
+    } else { showAlert(d.message||'เกิดข้อผิดพลาด','danger'); }
+  } catch(e) { closeModal(); showAlert('เชื่อมต่อไม่ได้: '+e.message,'danger'); }
+  btn.innerHTML='✅ ยืนยันจอง'; btn.disabled=false;
+}
+
+function closeModal() { document.getElementById('confirmModal').classList.remove('active'); }
+document.getElementById('confirmModal').addEventListener('click',e=>{ if(e.target===e.currentTarget)closeModal(); });
+
+// ===== STATUS TAB =====
+function renderStatus(data) {
+  let html='';
+  for (let i=1;i<=TOTAL_BUSES;i++) {
+    const cnt=data[i]?.count||0, pass=data[i]?.passengers||[];
+    const apv=data[i]?.approvedCount||0, pend=data[i]?.pendingCount||0;
+    const full=cnt>=MAX_PER_BUS, pct=Math.round(cnt/MAX_PER_BUS*100);
+    const rows = pass.length===0
+      ? `<div style="padding:12px;font-size:13px;color:var(--slate-muted);text-align:center">ยังไม่มีผู้จอง</div>`
+      : pass.map((p,idx)=>{
+          const ok=p.status==='อนุมัติแล้ว';
+          return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--line);font-size:13px">
+            <div><span style="color:var(--slate-muted);margin-right:6px">${idx+1}.</span><strong>${p.name}</strong></div>
+            <span class="${ok?'seal-approved':'seal-pending'}">${ok?'✅ อนุมัติ':'⏳ รอ'}</span>
+          </div>`;
+        }).join('');
+    html+=`<div class="status-bus-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="background:${BUS_COLORS[i]};color:#fff;padding:3px 11px;border-radius:20px;font-size:12px;font-weight:700">คันที่ ${i}</span>
+          <span style="font-weight:700">${BUS_LABELS[i]}</span>
+          <span style="font-size:12px;color:var(--slate-muted)">${BUS_GENDER[i]==='หญิง'?'👩 หญิง':'👨 ชาย'}</span>
+        </div>
+        <span style="font-weight:800;color:${full?'var(--red)':'var(--emerald)'}">${cnt}/${MAX_PER_BUS}</span>
+      </div>
+      <div class="cap-bar-wrap"><div class="cap-bar" style="width:${pct}%;background:${full?'#e05252':pct>=60?'#d97706':'#059669'}"></div></div>
+      <div style="margin-top:7px;display:flex;gap:14px;font-size:12px">
+        <span style="color:var(--emerald);font-weight:600">✅ อนุมัติ ${apv}</span>
+        <span style="color:var(--amber);font-weight:600">⏳ รอ ${pend}</span>
+      </div>
+      ${full?'<span class="badge-full" style="margin-top:8px">🚫 เต็มแล้ว</span>':`<span class="badge-open" style="margin-top:8px">✨ ว่าง ${MAX_PER_BUS-cnt} ที่</span>`}
+      <div style="margin-top:12px">
+        <button onclick="togglePanel(${i})" class="btn-secondary" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px">
+          <span id="ti${i}">▼</span> ดูรายชื่อ (${cnt} คน)
+        </button>
+        <div id="sp${i}" style="display:none;margin-top:8px;max-height:240px;overflow-y:auto;border:1.5px solid var(--line);border-radius:12px">${rows}</div>
+      </div>
+    </div>`;
+  }
+  document.getElementById('statusDetail').innerHTML = html;
+}
+
+function togglePanel(n) {
+  const p=document.getElementById(`sp${n}`), ic=document.getElementById(`ti${n}`);
+  const o=p.style.display==='block';
+  p.style.display=o?'none':'block'; ic.textContent=o?'▼':'▲';
+}
+
+// ===== ADMIN =====
+function adminLogin() {
+  if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
+    document.getElementById('adminPanel').style.display='block';
+  } else { showAlert('รหัสผ่านไม่ถูกต้อง','danger'); }
+}
+
+async function loadPassengers() {
+  const n = document.getElementById('adminBusSelect').value;
+  const listEl = document.getElementById('passengerList');
+  const exportEl = document.getElementById('passExportRow');
+  const batchEl = document.getElementById('batchBar');
+  if (!n || !SCRIPT_URL) { exportEl.style.display='none'; batchEl.style.display='none'; return; }
+  listEl.innerHTML='<div style="padding:12px;color:var(--slate-muted)">กำลังโหลด...</div>';
+  exportEl.style.display='none'; batchEl.style.display='none';
+  try {
+    const r = await fetch(`${SCRIPT_URL}?action=passengers&busNum=${n}`);
+    const d = await r.json();
+    lastPassData = {busNum:parseInt(n), passengers:d.passengers||[]};
+    if (d.passengers?.length > 0) {
+      listEl.innerHTML = `<div class="pass-list">${d.passengers.map((p,i)=>{
+        const ok=p.status==='อนุมัติแล้ว';
+        return `<div class="pass-item" id="pi_${p.stdId}">
+          <input type="checkbox" class="pass-cb" data-id="${p.stdId}" data-approved="${ok}" style="width:15px;height:15px;accent-color:var(--olive);cursor:pointer;flex-shrink:0">
+          <div class="pass-num">${i+1}</div>
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:13px">${p.name}</div>
+            <div style="font-size:11.5px;color:var(--slate-muted)">${p.stdId} · ${p.timestamp||''}</div>
+          </div>
+          <span class="${ok?'seal-approved':'seal-pending'}">${ok?'✅ อนุมัติ':'⏳ รอ'}</span>
+          <button onclick="toggleApprove('${p.stdId}',${ok})" style="font-size:11px;font-weight:700;padding:6px 10px;border-radius:20px;border:none;cursor:pointer;font-family:inherit;margin-left:4px;${ok?'background:var(--amber-bg);color:#92400e':'background:var(--emerald-bg);color:#047857'}">
+            ${ok?'↩':'✅'}
+          </button>
+        </div>`;
+      }).join('')}</div>
+      <div style="margin-top:6px;font-size:12.5px;color:var(--slate-muted)">รวม ${d.passengers.length}/${MAX_PER_BUS} · อนุมัติ ${d.passengers.filter(p=>p.status==='อนุมัติแล้ว').length}</div>`;
+      exportEl.style.display='block'; batchEl.style.display='block';
+      document.getElementById('checkAll').checked=false;
+    } else {
+      listEl.innerHTML='<div style="padding:12px;color:var(--slate-muted)">ยังไม่มีผู้จอง</div>';
+    }
+  } catch(e) { listEl.innerHTML=`<div style="padding:12px;color:var(--red)">Error: ${e.message}</div>`; }
+}
+
+function toggleCheckAll(cb) {
+  document.querySelectorAll('.pass-cb').forEach(c=>c.checked=cb.checked);
+}
+
+async function batchApprove(doApprove) {
+  const cbs = [...document.querySelectorAll('.pass-cb:checked')];
+  if (!cbs.length) { showAlert('กรุณาเลือกรายชื่อก่อน','warning'); return; }
+  const action = doApprove ? 'อนุมัติ' : 'ยกเลิกอนุมัติ';
+  if (!confirm(`ยืนยัน${action} ${cbs.length} คน?`)) return;
+  let ok=0, fail=0;
+  for (const cb of cbs) {
+    try {
+      const r = await fetch(`${SCRIPT_URL}?action=${doApprove?'approve':'unapprove'}&stdId=${cb.dataset.id}&adminPass=${ADMIN_PASSWORD}`);
+      const d = await r.json();
+      if (d.success) ok++; else fail++;
+    } catch { fail++; }
+  }
+  showAlert(`${action}สำเร็จ ${ok} คน${fail?` · ผิดพลาด ${fail} คน`:''}`, fail?'warning':'success');
+  loadPassengers(); loadBusStatus();
+}
+
+async function toggleApprove(stdId, currentlyApproved) {
+  if (!currentlyApproved && !confirm(`ยืนยันอนุมัติ นศท. ${stdId}?\n(ชำระค่ารถ 945 บาทแล้ว)`)) return;
+  try {
+    const r = await fetch(`${SCRIPT_URL}?action=${currentlyApproved?'unapprove':'approve'}&stdId=${stdId}&adminPass=${ADMIN_PASSWORD}`);
+    const d = await r.json();
+    if (d.success) { showAlert(d.message,'success'); loadPassengers(); loadBusStatus(); }
+    else showAlert(d.message,'danger');
+  } catch(e) { showAlert('เชื่อมต่อไม่ได้','danger'); }
+}
+
+async function cancelBooking() {
+  const id = document.getElementById('cancelId').value.trim();
+  if (!id) { showAlert('กรุณาป้อนเลขประจำตัว','warning'); return; }
+  if (!confirm(`ยืนยันยกเลิกการจองของ ${id}?`)) return;
+  try {
+    const r = await fetch(`${SCRIPT_URL}?action=cancel&stdId=${id}&adminPass=${ADMIN_PASSWORD}`);
+    const d = await r.json();
+    if (d.success) { showAlert(d.message,'success'); loadBusStatus(); }
+    else showAlert(d.message,'danger');
+  } catch(e) { showAlert('เชื่อมต่อไม่ได้','danger'); }
+}
+
+// ===== PRINT / EXPORT =====
+function buildTable(busNum, passengers, forPrint) {
+  const apv = passengers.filter(p=>p.status==='อนุมัติแล้ว').length;
+  const rows = passengers.map((p,i)=>`<tr>
+    <td style="text-align:center">${i+1}</td>
+    <td>${p.stdId}</td>
+    <td>${p.name}</td>
+    <td style="text-align:center">945</td>
+    <td style="text-align:center">${p.status==='อนุมัติแล้ว'?'✅ อนุมัติ':'☐ รออนุมัติ'}</td>
+    <td></td>
+  </tr>`).join('');
+  return `<div style="font-family:'Sarabun','Segoe UI',sans-serif;color:#1e293b;padding:${forPrint?'20px':'0'}">
+    <div style="text-align:center;border-bottom:3px solid #1a2744;padding-bottom:10px;margin-bottom:10px">
+      <div style="font-size:17px;font-weight:700">🚌 ระบบจองรถโดยสาร นศท. ชั้นปีที่ 1</div>
+      <div style="font-size:13px;color:#64748b;margin-top:2px">โรงเรียนมัธยมวัดหนองแขม · ปีการศึกษา 2569</div>
+    </div>
+    <div style="text-align:center;margin:12px 0">
+      <span style="background:${BUS_COLORS[busNum]};color:#fff;padding:6px 16px;border-radius:20px;font-size:14px;font-weight:700">
+        รถคันที่ ${busNum} · ${BUS_LABELS[busNum]} · นศท.${BUS_GENDER[busNum]}
+      </span>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="background:#eef2ff">
+        <th style="border:1px solid #e2e8f0;padding:7px">ที่</th>
+        <th style="border:1px solid #e2e8f0;padding:7px">เลขประจำตัว</th>
+        <th style="border:1px solid #e2e8f0;padding:7px">ชื่อ-สกุล</th>
+        <th style="border:1px solid #e2e8f0;padding:7px">ค่ารถ (บาท)</th>
+        <th style="border:1px solid #e2e8f0;padding:7px">สถานะ</th>
+        <th style="border:1px solid #e2e8f0;padding:7px">ลงชื่อขึ้นรถ</th>
+      </tr></thead>
+      <tbody>${rows||'<tr><td colspan="6" style="text-align:center;padding:12px;border:1px solid #e2e8f0">ยังไม่มีผู้จอง</td></tr>'}</tbody>
+    </table>
+    <div style="margin-top:8px;font-size:13px">รวม: <strong>${passengers.length}</strong>/${MAX_PER_BUS} คน · อนุมัติ <strong>${apv}</strong> คน</div>
+    <div style="margin-top:28px;display:flex;justify-content:space-between;font-size:13px">
+      <div>ผู้ตรวจสอบ/รับเงิน .......................................</div>
+      <div>วันที่ ......../......../........</div>
+    </div>
+  </div>`;
+}
+
+function openPrint(html) {
+  const w = window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>พิมพ์รายชื่อ</title>
+    <style>@page{size:A4;margin:14mm}body{margin:0}@media print{button{display:none}}</style>
+    </head><body>${html}
+    <div style="text-align:center;margin-top:16px">
+      <button onclick="window.print()" style="padding:11px 26px;font-size:14px;cursor:pointer;font-family:'Sarabun',sans-serif;border:none;border-radius:12px;background:linear-gradient(120deg,#1a2744,#4a7c59);color:#fff;font-weight:700">🖨️ พิมพ์</button>
+    </div></body></html>`);
+  w.document.close();
+}
+
+function printPassList() {
+  if (!lastPassData) return;
+  openPrint(buildTable(lastPassData.busNum, lastPassData.passengers, true));
+}
+
+function exportCSV() {
+  if (!lastPassData) return;
+  const {busNum,passengers} = lastPassData;
+  let csv = '\uFEFF' + 'ที่,เลขประจำตัว,ชื่อ-สกุล,รถคันที่,ประเภท,ค่ารถ,สถานะ,วันเวลาจอง\n';
+  passengers.forEach((p,i) => {
+    csv += [i+1, p.stdId, `"${p.name}"`, busNum, BUS_GENDER[busNum], 945, p.status||'รออนุมัติ', `"${p.timestamp||''}"`].join(',') + '\n';
+  });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download = `รถคันที่${busNum}_นศท.ปี1.csv`;
+  a.click();
+}
+
+async function printAllBuses() {
+  if (!SCRIPT_URL) { showAlert('ยังไม่ได้ตั้งค่าระบบ','warning'); return; }
+  let html='';
+  for (let i=1;i<=TOTAL_BUSES;i++) {
+    try {
+      const r = await fetch(`${SCRIPT_URL}?action=passengers&busNum=${i}`);
+      const d = await r.json();
+      html += buildTable(i, d.passengers||[], true);
+      if (i<TOTAL_BUSES) html += '<div style="page-break-after:always"></div>';
+    } catch(e) { html += `<div style="color:red;padding:12px">รถคันที่ ${i}: โหลดไม่ได้ (${e.message})</div>`; }
+  }
+  openPrint(html);
+}
+
+// ===== TABS =====
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['book','status','admin'][i]===name));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if (name==='status') renderStatus(busData);
+}
+
+// ===== ALERT =====
+function showAlert(msg, type) {
+  const el=document.getElementById('sysAlert');
+  const icons={warning:'⚠️',danger:'❌',success:'✅',info:'ℹ️'};
+  el.className=`alert alert-${type}`; el.style.display='flex';
+  el.innerHTML=`<span class="alert-icon">${icons[type]}</span><div>${msg}</div>`;
+  setTimeout(()=>el.style.display='none',5000);
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+setInterval(()=>{ if(SCRIPT_URL) loadBusStatus(); }, 30000);
+</script>
+</body>
+</html>
